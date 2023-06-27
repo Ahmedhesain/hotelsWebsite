@@ -18,6 +18,8 @@ import { FaAccessibleIcon, FaAlignRight, FaArrowDown, FaBus, FaCar, FaCartPlus, 
 import Carousel from 'react-bootstrap/Carousel';
 import LoadingSpinner from '../results/loading';
 
+import i18n from '../../i18n';
+
 function Details() {
     const[results,setRes]=useState({});
     const[allresults,setAllRes]=useState([]);
@@ -82,59 +84,59 @@ function Details() {
         <div className="row">
         <ul className="nav nav-underline position-relative">
             <li className="nav-item">
-               < a className="nav-link active" aria-current="page" href="#">Overview</a>
+               < a className="nav-link active" aria-current="page" href="#">{i18n.language==="en"?`Overview`:`ملخص`}</a>
             </li>
             <li className="nav-item">
-             <a className="nav-link" href="#second">Rooms</a>
+             <a className="nav-link" href="#second">{i18n.language==="en"?`Rooms`:`غرف`}</a>
              </li>
            <li className="nav-item">
-             <a className="nav-link" href="#third">Location</a>
+             <a className="nav-link" href="#third">{i18n.language==="en"?`Location`:`موقع`}</a>
             </li>
           <li className="nav-item">
-           <a className="nav-link " href="#fourth">Amenities</a>
+           <a className="nav-link " href="#fourth">{i18n.language==="en"?`Amenities`:`وسائل الراحة`}</a>
          </li>
          <li className="nav-item">
-           <a className="nav-link " href="#fifth">Policies</a>
+           <a className="nav-link " href="#fifth">{i18n.language==="en"?`Policies`:`سياسات`}</a>
          </li>
-         <button className="btn btn-primary position-absolute top-0 end-0 rounded " ><a className=" text-white" style={{textDecoration:"none"}} href="#second">Reserve Rooms</a></button>
+         <button className="btn btn-primary position-absolute top-0 end-0 rounded " ><a className=" text-white" style={{textDecoration:"none"}} href="#second">{i18n.language==="en"?`Reserve Rooms`:`إحجز غرف`}</a></button>
          
         </ul>
         <hr/>
         </div>
         <div className="row p-3">
             <div className="col-sm-8">
-                <h1>{results.name}</h1>
-                <p>{results.discriprion}</p>
-                <h3>{results.evaluation}/10 Fabulous</h3>
-                <button className="btn text-start text-primary"  >See all 268 reviews <AiOutlineArrowRight /></button>
-                <h3>Popular amenities</h3>
+                <h1>{i18n.language==="en"?`${results.name}`:`${results.nameAR}`}</h1>
+                <p>{i18n.language==="en"?`${results.discriprion}`:`${results.discriprionAR}`}</p>
+                <h3>{results.evaluation}/10 {i18n.language==="en"?`Fabulous`:`رائع`}</h3>
+                <button className="btn text-start text-primary"  >{i18n.language==="en"?`See all 268 reviews`:`اطلع على جميع التعليقات البالغ عددها 268`}<AiOutlineArrowRight /></button>
+                <h3>{i18n.language==="en"?`Popular amenities`:`وسائل الراحة الشائعة`}</h3>
                 <div className='row'>
                 <div className="col-6">
-                    <p><AiOutlineCoffee/> Free breakfast</p>
-                    <p><AiFillCar/> Free barking</p>
-                    <p><GiForkKnifeSpoon/> Free Restaurant</p>
+                    <p><AiOutlineCoffee/>{i18n.language==="en"?`Free breakfast`:`فطور مجاني`} </p>
+                    <p><AiFillCar/>{i18n.language==="en"?`Free parking`:`موقف سيارات مجاني`} </p>
+                    <p><GiForkKnifeSpoon/>{i18n.language==="en"?`Free Restaurant`:`مطعم مجاني`} </p>
 
                 </div>
                 <div className="col-6">
-                    <p><BiBus/> Airport transfer</p>
-                    <p><AiOutlineWifi/> Free WiFi</p>
-                    <p><BiCloudSnow/> Air conditioning</p>
+                    <p><BiBus/> {i18n.language==="en"?`Airport transfers`:`انتقالات المطار`}</p>
+                    <p><AiOutlineWifi/> {i18n.language==="en"?`Free WiFi`:`واى فاى مجانى`}</p>
+                    <p><BiCloudSnow/>{i18n.language==="en"?`Air conditioning`:`تكيف`}</p>
 
                 </div>
                 </div>
             </div>
             <div className="col-sm-4">
-            <div ><iframe width="100%" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=1%20sekt%20elfadl,%20Talaat%20Harb,%20st,%20Cairo%20Governorate+(Valencia%20hotel)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/distance-area-calculator.html">area maps</a></iframe></div>
+            <div ><iframe width="100%" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=1%20sekt%20elfadl,%20Talaat%20Harb,%20st,%20Cairo%20Governorate+(Valencia%20hotel)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/distance-area-calculator.html">{i18n.language==="en"?`area maps`:`خرائط المنطقة`}</a></iframe></div>
                 
-                <p>{results.address}</p>
-                <button className="btn text-start text-primary"  >View in a map <AiOutlineArrowRight /></button>
-                <h3>What's around</h3>
-                <p><BiCurrentLocation/>  {results.around}</p>
+                <p>{i18n.language==="en"?`${results.address}`:`${results.addressAR}`}</p>
+                <button className="btn text-start text-primary"  >{i18n.language==="en"?`View in a map`:`عرض في الخريطة`} <AiOutlineArrowRight /></button>
+                <h3>{i18n.language==="en"?`What's around`:`ماذا يوجد في الجوار`}</h3>
+                <p><BiCurrentLocation/>  {i18n.language==="en"?`${results.around}`:`${results.aroundAR}`}</p>
                 
             </div>
         </div>
 
-        <h1>Choose your room</h1>
+        <h1>{i18n.language==="en"?`Choose your room`:`اختر غرفتك`}</h1>
 
         <div className="row row-cols-1 row-cols-md-3 row-cols-sm-2 g-4" id='second'>
          <div className="col">
@@ -159,37 +161,37 @@ function Details() {
       </Carousel.Item>
       </Carousel>
       <div className="card-body position-relative">
-        <h5 className="card-title">{results.discriprion}</h5>
-        <p className="card-text">{results.evaluation}/10  good</p>
-        <p className="card-text"><BiBuilding/> City view</p>
-        <p className="card-text"><BsFillPersonFill/> Sleeps {results.beds}</p>
-        <p className="card-text"> <AiOutlineWifi/> Free WiFi</p>
-        <p className="card-text"><AiOutlineCoffee/> Free breakfast</p>
-        <p className="card-text"><AiFillCar/> Free self parking</p>
-        <p className="card-text"><BsFillPersonFill/> {results.address}</p>
-        <p className="card-text"><BiBed/> {results.beds} King Bed</p>
-        <p className="card-text"><BiMoon/> Collect and Redeem</p>
-        <a href='#' >more details <AiOutlineArrowRight /> </a>
+        <h5 className="card-title">{i18n.language==="en"?`${results.discriprion}`:`${results.discriprionAR}`}</h5>
+        <p className="card-text">{results.evaluation}/10 {i18n.language==="en"?`good`:`جيد`} </p>
+        <p className="card-text"><BiBuilding/> {i18n.language==="en"?`City view`:`اطلالة المدينة`}</p>
+        <p className="card-text"><BsFillPersonFill/> {i18n.language==="en"?`Sleeps`:`ينام`} {results.beds}</p>
+        <p className="card-text"> <AiOutlineWifi/> {i18n.language==="en"?`Free WiFi`:`واى فاى مجانى`}</p>
+        <p className="card-text"><AiOutlineCoffee/>{i18n.language==="en"?`Free breakfast`:`فطور مجاني`} </p>
+        <p className="card-text"><AiFillCar/> {i18n.language==="en"?`Free self parking`:`موقف سيارات مجاني`}</p>
+        <p className="card-text"><BsFillPersonFill/> {i18n.language==="en"?`${results.address}`:`${results.addressAR}`}</p>
+        <p className="card-text"><BiBed/> {results.beds} {i18n.language==="en"?`King Bed`:`سرير ملكي`}</p>
+        <p className="card-text"><BiMoon/> {i18n.language==="en"?`Collect and Redeem`:`جمع واسترداد`}</p>
+        <a href='#' >{i18n.language==="en"?"more details":"المزيد من التفاصيل"} <AiOutlineArrowRight /> </a>
         <hr />
-        <h6 className="card-title">Cancellation policy</h6>
-        <a href='#' >More details on all policy options<BsInfo/></a>
+        <h6 className="card-title">{i18n.language==="en"?`Cancellation policy`:`سياسة الإلغاء`}</h6>
+        <a href='#' >{i18n.language==="en"?`More details on all policy options`:`مزيد من التفاصيل حول جميع خيارات السياسة`}<BsInfo/></a>
         <div className="form-check">
            <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
              <label className="form-check-label" for="flexRadioDefault1">
-                 Non-refundable
+                 {i18n.language==="en"?`Non-refundable`:`غير قابل للاسترجاع`}
               </label>
              </div>
             <div className="form-check">
              <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked/>
              <label className="form-check-label" for="flexRadioDefault2">
-             Fully refundable before 18 Jun 2023
+             {i18n.language==="en"?`Fully refundable before 18 Jun 2023`:`قابل للاسترداد بالكامل قبل 18 حزيران (يونيو) 2023`}
             </label>
            </div>
-           <h5> <span className="badge bg-danger">10% off</span></h5>
+           <h5> <span className="badge bg-danger">{i18n.language==="en"?`10% off`:`10% خصم`}</span></h5>
            <h3>€{results.price}</h3>
-           <span>for 1 night includes taxes & fees</span><br/>
-           <a href='#' >Price details <AiOutlineArrowRight /> </a>
-           <button className="btn btn-primary position-absolute  end-0  " > <Link to='/booking' style={{textDecoration: "none" ,color: "white"}}>Reserve</Link> </button>
+           <span>{i18n.language==="en"?`for 1 night includes taxes & fees`:`لليلة واحدة شاملة الضرائب والرسوم`}</span><br/>
+           <a href='#' >{i18n.language==="en"?`Price details`:`تفاصيل السعر`} <AiOutlineArrowRight /> </a>
+           <button className="btn btn-primary position-absolute  end-0  " > <Link to='/booking' style={{textDecoration: "none" ,color: "white"}}>{i18n.language==="en"?`Reserve`:`إحجز`}</Link> </button>
 
 
 
@@ -201,7 +203,7 @@ function Details() {
         </div>
 
         <div className="row p-2" id='third'>
-            <h2>You may also like</h2>
+            <h2>{i18n.language==="en"?`You may also like`:`ربما يعجبك أيضا`}</h2>
             <Carousel>
       <Carousel.Item>
       <div className="row row-cols-1 row-cols-md-3 g-4">
@@ -211,13 +213,13 @@ function Details() {
           <div className="card">
             <img src={result.data.img1} className="card-img-top" alt="..."/>
             <div className="card-body">
-              <h5 className="card-title">{result.data.name}</h5>
+              <h5 className="card-title">{i18n.language==="en"?`${result.data.name}`:`${result.data.nameAR}`}</h5>
               <IoMdStar size={25 } color='black' className='filled' /><IoMdStar size={25 } color='black' className='filled' /><IoMdStar size={25 } color='black' className='filled' /><IoMdStar size={25 } color='black' className='filled' /><IoMdStar size={25 } color='black' className='filled' />
-              <p className="card-text">D{result.data.address}</p>
+              <p className="card-text">{i18n.language==="en"?`${result.data.address}`:`${result.data.addressAR}`}</p>
               <div className="row">
-                  <div className="col-6"><h6>{result.data.city} <span class="badge bg-secondary">New</span></h6> Very Good</div>
+                  <div className="col-6"><h6>{i18n.language==="en"?`${result.data.city}`:`${result.data.cityAR}`} <span class="badge bg-secondary">{i18n.language==="en"?`New`:`جديد`}</span></h6> {i18n.language==="en"?`Very Good`:`جيد جدًا`}</div>
                   <div className="col-6"><h2>${result.data.price}</h2>
-                  <p>for 1 night</p></div>
+                  <p>{i18n.language==="en"?`for 1 night`:`لمدة ليلة واحدة`}</p></div>
       
               </div>
             </div>

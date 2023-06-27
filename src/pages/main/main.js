@@ -6,10 +6,11 @@ import three from '../../../src/images/3.jpg'
 import four from '../../../src/images/4.jpg'
 import five from '../../../src/images/5.jpg'
 import { SearchContext } from '../../context/context';
-
+import { useTranslation } from 'react-i18next';
 import { PersonsContext } from '../../context/personsContext';
 import { CheckinContext } from '../../context/checkinContext';
 import { CheckoutContext } from '../../context/checkoutContext copy';
+
 
 
 function Main() {
@@ -17,15 +18,16 @@ function Main() {
   var {personsValue,setPersonsValue}=useContext(PersonsContext);
   var {checkinValue,setCheckinValue}=useContext(CheckinContext);
   var {checkoutValue,setCheckoutValue}=useContext(CheckoutContext);
+  const [ t,i18n ] = useTranslation();
 
   return (
- <div>
+ <div dir={`${i18n.language==="en"?"ltr":"rtl"}`}>
     <div style={{height:"1px" ,opacity:"30%"}} className='w-100 bg-secondary'></div>
      <div class="container">
           
           <div class="row">
-            <h2 class="m-2"> <span class="text-primary">Where</span> to?</h2>
-            <p class="m-2">Try searching for a city, a specific hotel, or even a landmark!</p>
+            <h2 class="m-2"> <span class="text-primary">{i18n.language==="en"?"Where":"إلى"}</span> {i18n.language==="en"?"to?":"أين؟"}</h2>
+            <p class="m-2">{i18n.language==="en"?"Try searching for a city, a specific hotel, or even a landmark!":"حاول البحث عن مدينة أو فندق معين أو حتى معلم!"}</p>
           </div>
           <div class="row col-12 d-flex pt-3 align-items-center p-2 m-1"  style={{boxShadow:" 2px 2px 2px 2px #888888"}}>
             <div class="col-lg-3 col-md-3 col-sm-12 col-12 mb-1" >
@@ -37,7 +39,7 @@ function Main() {
 </svg>
                   </div>
                 </div>
-                <input type="text" className="form-control" id="inlineFormInputGroup" placeholder="Search"
+                <input type="text" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"search":"إبحث"}
                 value={searchValue}
                 onChange={(e)=>{setSearchValue(e.target.value); console.log(searchValue)}}/>
               </div>
@@ -45,7 +47,7 @@ function Main() {
             
             <div class="col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                <label for="checkIn" class="input-group-text">in</label>
+                <label for="checkIn" class="input-group-text">{i18n.language==="en"?`in`:`حجز`}</label>
                 <input type="date" class="form-control" id="checkIn"
                   value={checkinValue}
                   onChange={(e)=>{setCheckinValue(e.target.value); console.log(checkinValue)}}/>
@@ -54,31 +56,29 @@ function Main() {
       
             <div class="col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                  <label for="checkOut" class="input-group-text">out</label>
+                  <label for="checkOut" class="input-group-text">{i18n.language==="en"?`out`:`خروج`}</label>
                   <input type="date" class="form-control" id="checkOut" value={checkoutValue}
                   onChange={(e)=>{setCheckoutValue(e.target.value); console.log(checkoutValue)}}/>
                 </div>
             </div>
-            
-            <div class="col-sm col-lg-4 col-md-4 col-sm-5 col-4   mb-1 rounded " >
+            <div class="col-sm col-lg-3 col-md-3 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                  <label for="checkOut" class="input-group-text">
+              <label for="checkOut" class="input-group-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                   </svg>
-                </label>
-                  <div class="nav-item dropdown  ">
-                  <input type="number" className="form-control" id="inlineFormInputGroup" placeholder="2 Persons"
+                </label>                
+                   <input type="number" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"one persone":"شخص واحد"}
                   value={personsValue}
                   onChange={(e)=>{setPersonsValue(e.target.value); console.log(personsValue)}}
                />
-                  </div>        
-                  </div>
+                </div>
             </div>
+           
           
            
-            <button type="button" class="btn btn-primary search-b col-lg-1 col-md-1 col-sm-6 col-6 mb-2 ms-lg-0 ms-md-0 ms-sm-2 align-items-center ms-5 col-6"   >
-             <Link to='/results' style={{textDecoration: "none" ,color: "white"}}>Search</Link>
+            <button type="button" class="btn btn-primary search-b col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1"   >
+             <Link to='/results' style={{textDecoration: "none" ,color: "white"}}>{i18n.language==="en"?"search":"إبحث"}</Link>
               </button>
             
           
@@ -93,7 +93,8 @@ function Main() {
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <h3 class="card-title fw-bold" >
-Enjoy the same savings of 20% in the app, and also:</h3>
+              {i18n.language==="en"?"Enjoy the same savings of 20% in the app, and also:":"تمتع بنفس التوفير بنسبة 20٪ في التطبيق وأيضًا:"}
+</h3>
               <svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
   <path d="M2 2h2v2H2V2Z"/>
   <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z"/>
@@ -104,10 +105,10 @@ Enjoy the same savings of 20% in the app, and also:</h3>
             </div>
             
           
-            <p class="card-text" style={{fontSize: "small"}}>Get notifications about your stay</p>
-            <p class="card-text" style={{fontSize: "small"}}>Book anytime, anywhere at the last minute</p>
-            <p class="card-text" style={{fontSize: "small"}}>Easily manage your stay on the go</p>
-            <p class="card-text" style={{fontSize: "large", fontWeight:"bold"}}>Scan the QR code with your device camera and download our app</p>
+            <p class="card-text" style={{fontSize: "small"}}>{i18n.language==="en"?"Get notifications about your stay":"احصل على إشعارات حول إقامتك"}</p>
+            <p class="card-text" style={{fontSize: "small"}}>{i18n.language==="en"?"Book anytime, anywhere at the last minute":"احجز في أي وقت وفي أي مكان في اللحظة الأخيرة"}</p>
+            <p class="card-text" style={{fontSize: "small"}}>{i18n.language==="en"?"Easily manage your stay on the go":"إدارة إقامتك بسهولة أثناء التنقل"}</p>
+            <p class="card-text" style={{fontSize: "large", fontWeight:"bold"}}>{i18n.language==="en"?"Scan the QR code with your device camera and download our app":"امسح رمز الاستجابة السريعة ضوئيًا باستخدام كاميرا جهازك وقم بتنزيل تطبيقنا"}</p>
 
           </div>
         </div>
@@ -116,30 +117,30 @@ Enjoy the same savings of 20% in the app, and also:</h3>
            </div>
           
           <div class="row">
-
+{/* 
           <div className="row">
-            <h2 className="m-2"> <span className="text-primary">Pick up where you left off</span> </h2>
-            <p className="m-2">No Resrervations Yet!!!</p>
-          </div>
+            <h2 className="m-2"> <span className="text-primary">{i18n.language==="en"?"Pick up where you left off":"تابع من حيث توقفت"}</span> </h2>
+            <p className="m-2">{i18n.language==="en"?"No Resrervations Yet!!!":"لا حجوزات بعد !!!"}</p>
+          </div> */}
           <div className="row">
-          <h3 className="m-2 pt-4 pb-4"> <span style={{fontWeight:"700"}} >Hotels.com makes it easy and rewarding. Always</span> </h3>
+          <h3 className="m-2 pt-4 pb-4"> <span style={{fontWeight:"700"}} >{i18n.language==="en"?"Hotels.com makes it easy and rewarding. Always":"موقع Hotels.com يجعل الأمر سهلاً ومفيدًا. دائماً"}</span> </h3>
 
             <div className="row col-12 ">
             <div className="container-fluid d-flex  col-lg-3 col-md-3 col-sm-12 col-xs-1  offset-1 offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
      
             <div className='m-3'><img style={{width:50 , height:50}} src="https://a.travel-assets.com/egds/marks/loyalty_hotels.svg" alt="" /> </div>
-            <div><h6>Reward yourself your way</h6>
-            <p>Stay where you want, when you want, and get rewarded</p>
-            <a href="#">Learn about Hotels.com Rewards</a>
+            <div><h6>{i18n.language==="en"?"Reward yourself your way":"كافئ نفسك على طريقتك"}</h6>
+            <p>{i18n.language==="en"?"Stay where you want, when you want, and get rewarded":"ابق حيث تريد ، وقتما تريد ، واحصل على المكافأة"}</p>
+            <a href="#">{i18n.language==="en"?"Learn about Hotels.com Rewards":"تعرف على المزيد حول برنامج Hotels.com Rewards"}</a>
             </div>
 
    
           </div>
            <div className="container-fluid d-flex col-lg-3 col-md-3 col-sm-12 col-xs-1  offset-1 offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
            <div className='m-3'><img style={{width:50 , height:50}} src="https://a.travel-assets.com/egds/marks/brands/hotels/mod.svg" alt="" /> </div>
-            <div><h6>Unlock instant savings</h6>
-            <p>Save an average of 15% on thousands of hotels with Member Prices</p>
-            <a href="#">Sign up, it's free</a> <a href="#" className='ms-3'>Sign in</a>
+            <div><h6>{i18n.language==="en"?"Unlock instant savings":"فتح المدخرات الفورية"}</h6>
+            <p>{i18n.language==="en"?"Save an average of 15% on thousands of hotels with Member Prices":"وفر ما متوسطه 15٪ على آلاف الفنادق ذات أسعار الأعضاء"}</p>
+            <a href="#">{i18n.language==="en"?"Sign up, it's free":"التسجيل ، إنه مجاني"}</a> <a href="#" className='ms-3'>{i18n.language==="en"?"Sign in":"تسجيل الدخول"}</a>
             </div>
 
    
@@ -147,8 +148,8 @@ Enjoy the same savings of 20% in the app, and also:</h3>
           <div className="container-fluid d-flex col-lg-3 col-md-3 col-sm-12 col-xs-1  offset-1 offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
      
           <div className='m-3'><img style={{width:50 , height:50}} src="https://a.travel-assets.com/egds/marks/loyalty_hotels.svg" alt="" /> </div>
-            <div><h6>Free cancellation</h6>
-            <p>Flexible bookings on most hotels*</p>
+            <div><h6>{i18n.language==="en"?"Free cancellation":"إلغاء مجاني"}</h6>
+            <p>{i18n.language==="en"?"Flexible bookings on most hotels*":"حجوزات مرنة لمعظم الفنادق *"}</p>
             
             </div>
 
@@ -158,33 +159,33 @@ Enjoy the same savings of 20% in the app, and also:</h3>
           </div>
           </div>
           <div >
-            <h3 class="m-2"> <span style={{fontWeight:"700"}} >We do more than just hotels...</span> </h3>
+            <h3 class="m-2"> <span style={{fontWeight:"700"}} >{i18n.language==="en"?"We do more than just hotels...":"نحن نقوم بأكثر من مجرد فنادق ..."}</span> </h3>
             <div className='row col-12'>
             <div class="card p-0 text-white container-fluid col-lg-2 col-md-4 col-sm-5 col-6 col-xs-1  offset-1 offset-lg-0 ms-lg-2 ms-md-2 offset-md-0 mb-sm-3 me-lg-0 mb-3">
              <img class="card-img w-100" src={two} alt="Card image" />
             <div class="card-img-overlay">
-            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>Appertemnt</h5>
+            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>{i18n.language==="en"?"Appartements":"شقق"}</h5>
    
              </div>
            </div>
            <div class="card p-0 text-white container-fluid col-lg-2 col-md-4 col-sm-5 col-6 col-xs-1  offset-1 offset-lg-0 ms-lg-2 ms-md-2 offset-md-0 mb-sm-3 me-lg-0 mb-3">
              <img class="card-img w-100" src={three} alt="Card image" />
             <div class="card-img-overlay">
-            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>Cottages</h5>
+            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>{i18n.language==="en"?"Cottages":"أكواخ"}</h5>
    
              </div>
            </div>
            <div class="card p-0 text-white container-fluid col-lg-2 col-md-4 col-sm-5 col-6 col-xs-1  offset-1 offset-lg-0 ms-lg-2 ms-md-2 offset-md-0 mb-sm-3 me-lg-0 mb-3">
              <img class="card-img w-100" src={four} alt="Card image" />
             <div class="card-img-overlay">
-            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>Villas</h5>
+            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>{i18n.language==="en"?"Villas":"فلل"}</h5>
    
              </div>
            </div>
            <div class="card p-0 text-white container-fluid col-lg-2 col-md-4 col-sm-5 col-6 col-xs-1  offset-1 offset-lg-0 ms-lg-2 ms-md-2 offset-md-0 mb-sm-3 me-lg-0 mb-3">
              <img class="card-img w-100" src={five} alt="Card image" />
             <div class="card-img-overlay">
-            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>Motels</h5>
+            <h5 class="card-title text-bottom "style={{paddingTop:"40%"}}>{i18n.language==="en"?"Motels":"موتيلات"}</h5>
    
              </div>
            </div>

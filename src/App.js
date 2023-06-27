@@ -8,7 +8,7 @@ import Results from './pages/results/results';
 import 'firebase/firestore'
 import 'firebase/auth'
 import { SearchProvider } from './context/context';
-import React ,{useState} from 'react';
+import React ,{useEffect, useState} from 'react';
 import { LanguageProvider } from './context/languageContext';
 import { IdProvider } from './context/contextId';
 import Details from './pages/details/details';
@@ -21,6 +21,12 @@ import { CheckoutProvider } from './context/checkoutContext copy';
 import { CurrencyProvider } from './context/currencyContext';
 import { EmailProvider } from './context/emailContext';
 import Private from './pages/private/private';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import Cart from './pages/cart/cart';
+import PrivateCart from './pages/privateCart/privateCart';
+import PrivateBooking from './pages/privateBooking/privateBooking';
+// import firebase from './pages/results/firebase';
+
 
 
 function App() {
@@ -33,9 +39,16 @@ function App() {
   const [checkoutValue,setCheckoutValue]=useState("")
   const [emailValue,setEmailValue]=useState("")
 
+  // const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     setUser(user);
+  //   })
+  // }, [])
   return (
-    <div>
+    <div >
+  <PayPalScriptProvider options={{"clientId":"AT6N7gx5ZrLVj1Qfx2OsdkvCGCfpRlF5MgArObu35cU7hkkBvB_oSHGDjlU10MdCCmvfCfKtQzKrlPbH"}} > 
   <LanguageProvider value={{languageValue,setLanguageValue}}>
   <CurrencyProvider value={{currencyValue,setCurrencyValue}}>
   <EmailProvider value={{emailValue,setEmailValue}}>
@@ -56,6 +69,7 @@ function App() {
     <Route path='/booking' element={<Booking/>}></Route>
     <Route path='/languages' element={<LangChange/>}></Route>
     <Route path='/login' element={<Login/>} ></Route>
+    <Route path='/cart' element={<PrivateCart/>} ></Route>
 
     </Routes>
     </CheckoutProvider>
@@ -67,6 +81,7 @@ function App() {
     </EmailProvider>
     </CurrencyProvider>
   </LanguageProvider>
+  </PayPalScriptProvider>
    <Footer/>
    </div> 
   );

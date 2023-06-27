@@ -294,12 +294,13 @@ export default function Footer() {
         </MDBRow>
       </MDBContainer>
 
-      <div className='text-center p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+      <div className=' p-3'>
         &copy; {new Date().getFullYear()} Copyright:{' '}
         <a className='text-dark' href='https://mdbootstrap.com/'>
          Hotels.com is an Expedia Group company. All rights reserved.
 Hotels.com and the Hotels.com logo are trademarks or registered trademarks of Hotels.com, LP in the United States and/or other countries. All other trademarks are the property of their respective owners.
-        </a>
+LP in the United States and/or other countries. All other trademarks are the property of their respective owners.
+      </a>
       </div>
     </MDBFooter>
   );

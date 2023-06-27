@@ -1,40 +1,51 @@
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from "react-bootstrap/Button";
 import { removeFromFavorites } from '../../store/actions/action';
 import { Link } from 'react-router-dom';
 import { IdContext } from '../../context/contextId';
 import i18n from '../../i18n';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../results/firebase';
+import { doc, deleteDoc } from 'firebase/firestore'
 
-function Favorites() {
+
+
+function Cart() {
   const favorites = useSelector((state) => state.favorites.favorites);
   const dispatch = useDispatch();
   var {setIdValue}=useContext(IdContext)
+  const[allresults,setAllRes]=useState([]);
 
-
+  function getAllData(){
+    const q = query(collection(db, "orders"), where("userName", "==", "ahmed hesain"));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setAllRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
   useEffect(() => {
-    const storedFavorites = localStorage.getItem('favorites');
-    if (storedFavorites) {
-      dispatch({ type: 'SET_FAVORITES', payload: JSON.parse(storedFavorites) });
-    }
-  }, [dispatch]);
-
+    getAllData()
+  }, []);
   useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
-  const handleRemoveFromFavorites = (movieId) => {
-    dispatch(removeFromFavorites(movieId));
+    getAllData()
+  }, [allresults]);
+  const handleRemoveFromCart = async  (hotelId) => {
+    
+      const reference = doc(db, 'orders', hotelId)
+      await deleteDoc(reference)
+  
   };
 
-  if (!favorites) {
-    return null; 
-  }
 
   return (
 <div class="row col-12 ">
-        {favorites.map((hotel) => (
+        {allresults.map((hotel) => (
               <div class="container-fluid col-lg-5 col-md-6 col-sm-12  offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
 
                 <div class="card "key={hotel.id}  style={{boxShadow: "4px 4px 4px 4px #888888"}} >
@@ -45,11 +56,11 @@ function Favorites() {
                            <div class="col-md-8 col-sm-8 col-lg-8 ">
                            <div class="card-body">
                               <div class="d-flex justify-content-between">
-                                <h5 class="card-title fw-bold" style={{fontSize: "medium"}}>{i18n.language==="en"?`${hotel.data.name}`:`${hotel.data.nameAR}`}</h5>
+                                <h5 class="card-title fw-bold" style={{fontSize: "medium"}}>{i18n.language==="en"?`${hotel.data.roomName}`:`${hotel.data.nameAR}`}</h5>
                                
                   <Button
                     variant="btn btn-outline-danger ms-2"
-                     onClick={() => handleRemoveFromFavorites(hotel.id)}
+                     onClick={() => handleRemoveFromCart(hotel.id)}
                   >
                   {i18n.language==="en"?"Remove":"إزالة"} 
                    </Button>
@@ -84,4 +95,4 @@ function Favorites() {
   );
 }
 
-export default Favorites;
+export default Cart;
