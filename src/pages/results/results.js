@@ -1,5 +1,5 @@
 import React ,{useState,useEffect,useContext} from 'react';
-import { collection ,getDocs} from 'firebase/firestore';
+import { collection ,getDocs,query,where} from 'firebase/firestore';
 import { db } from './firebase';
 import { SearchContext } from '../../context/context';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,29 @@ function Results() {
     const favorites = useSelector((state) => state.favorites.favorites);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const [value, setValue] = useState('excellent');
+    const [distanceValue, setdistanceValue] = useState('');
 
+    const handleChange = (event) => {
+      setValue(event.target.value);
+      console.log(value)
+      filterPrice();
+      
+    //   querySnapshot.forEach((doc) => {
+    //     // doc.data() is never undefined for query doc snapshots
+    //     console.log(doc.id, " => ", doc.data());
+    // });
+    };
+    const handleChangeDistance = (event) => {
+      setdistanceValue(event.target.value);
+      console.log(value)
+      filterfromTown();
+      
+    //   querySnapshot.forEach((doc) => {
+    //     // doc.data() is never undefined for query doc snapshots
+    //     console.log(doc.id, " => ", doc.data());
+    // });
+    };
   const isFavorite = (movie) => {
     if (Array.isArray(favorites)) {
         return favorites.some((favMovie) => favMovie.id === movie.id);
@@ -40,13 +62,13 @@ function Results() {
       }
     };
   useEffect(() =>{
-    getData()
+    getData();
 
   },[]);
   useEffect(() =>{
    
 
-  },[dispatch,idValue,searchValue]);
+  },[dispatch,idValue,searchValue,value]);
 
   function getData(){
     const resultsCollection=collection(db,searchValue);
@@ -60,10 +82,48 @@ function Results() {
      setLoading(false);
     }).catch(err=>{console.log(err);});
   }
+  // function filterPrice(){
+  //   const q = query(collection(db, searchValue), where("price", "==", value));
+  //   const querySnapshot =  getDocs(q);
+
+  //   querySnapshot.forEach((doc) => {
+  //     const result =doc.docs.map(doc=>({
+  //       data:doc.data(),
+  //       id:doc.id
+  //      }))
+  //      setRes(result);
+  //     // doc.data() is never undefined for query doc snapshots
+  //     console.log(doc.id, " => ", doc.data());
+  //   }).catch(err=>{console.log(err);});
+  // }
+  function filterPrice(){
+    const q = query(collection(db, searchValue), where("rate", "==", value));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
+  function filterfromTown(){
+    const q = query(collection(db, searchValue), where("distance", "==", distanceValue));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
+  
   return (
-    loading?<div style={{width:"100%",height:"400px",paddingLeft:"45%"}}><LoadingSpinner /></div>: <div className='bg-light'>
+    loading?
+    <div style={{width:"100%",height:"400px",paddingLeft:"45%"}}><LoadingSpinner /></div>: <div className='bg-light'>
      <div className="container pt-3 ">
-     <div class="row col-12 d-flex pt-3 align-items-center p-2 m-1"  style={{boxShadow:" 2px 2px 2px 2px #888888"}}>
+    <div class="row col-12 d-flex pt-3 align-items-center p-2 m-1"  style={{boxShadow:" 2px 2px 2px 2px #888888"}}>
             <div class="col-lg-3 col-md-3 col-sm-12 col-12 mb-1" >
               <div class="input-group ">
                 <div class="input-group-prepend">
@@ -73,7 +133,7 @@ function Results() {
 </svg>
                   </div>
                 </div>
-                <input type="text" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"Search":"ابحث"}
+                <input type="text" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"search":"إبحث"}
                 value={searchValue}
                 onChange={(e)=>{setSearchValue(e.target.value); console.log(searchValue)}}/>
               </div>
@@ -81,7 +141,7 @@ function Results() {
             
             <div class="col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                <label for="checkIn" class="input-group-text">{i18n.language==="en"?"in":"حجز"}</label>
+                <label for="checkIn" class="input-group-text">{i18n.language==="en"?`in`:`حجز`}</label>
                 <input type="date" class="form-control" id="checkIn"
                   value={checkinValue}
                   onChange={(e)=>{setCheckinValue(e.target.value); console.log(checkinValue)}}/>
@@ -90,31 +150,29 @@ function Results() {
       
             <div class="col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                  <label for="checkOut" class="input-group-text">{i18n.language==="en"?"out":"خروج"}</label>
+                  <label for="checkOut" class="input-group-text">{i18n.language==="en"?`out`:`خروج`}</label>
                   <input type="date" class="form-control" id="checkOut" value={checkoutValue}
                   onChange={(e)=>{setCheckoutValue(e.target.value); console.log(checkoutValue)}}/>
                 </div>
             </div>
-            
-            <div class="col-sm col-lg-4 col-md-4 col-sm-5 col-4   mb-1 rounded " >
+            <div class="col-sm col-lg-3 col-md-3 col-sm-6 col-6 mb-1">
               <div class="input-group">
-                  <label for="checkOut" class="input-group-text">
+              <label for="checkOut" class="input-group-text">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                   </svg>
-                </label>
-                  <div class="nav-item dropdown  ">
-                  <input type="number" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"one person":"شخص واحد"}
+                </label>                
+                   <input type="number" className="form-control" id="inlineFormInputGroup" placeholder={i18n.language==="en"?"one persone":"شخص واحد"}
                   value={personsValue}
                   onChange={(e)=>{setPersonsValue(e.target.value); console.log(personsValue)}}
                />
-                  </div>        
-                  </div>
+                </div>
             </div>
+           
           
            
-            <button onClick={()=>{ getData()}} type="button" class="btn btn-primary search-b col-lg-1 col-md-1 col-sm-6 col-6 mb-2 ms-lg-0 ms-md-0 ms-sm-2 align-items-center ms-5 col-6"   >
-            {i18n.language==="en"?"Search":"إبحث"}
+            <button type="button" class="btn btn-primary search-b col-sm col-lg-2 col-md-2 col-sm-6 col-6 mb-1"   >
+             <Link to='/results' style={{textDecoration: "none" ,color: "white"}}>{i18n.language==="en"?"search":"إبحث"}</Link>
               </button>
             
           
@@ -123,7 +181,105 @@ function Results() {
           
         
         </div>
-    
+      <div className="container pt-3 ">
+      <div class="row col-12 d-flex pt-3 align-items-center p-2 m-1"  >
+             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+               <div class="input-group ">
+                 
+                 <label>
+
+       Filter By Rate
+
+       <select value={value} onChange={handleChange}>
+
+         <option value="excellent">excellent</option>
+
+         <option value="very good">very good</option>
+
+         <option value="good">good</option>
+
+       </select>
+
+     </label>
+
+     {/* <p>Rate is {value}!</p> */}
+               </div>
+             </div>
+             
+             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+               <div class="input-group ">
+                 
+                 <label>
+
+       Filter By distance
+
+       <select value={distanceValue} onChange={handleChangeDistance}>
+
+         <option value="100">100</option>
+
+         <option value="500">500</option>
+
+         <option value="200">200</option>
+
+       </select>
+
+     </label>
+
+     {/* <p>Rate is {value}!</p> */}
+               </div>
+             </div>
+
+             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+               <div class="input-group ">
+                 
+                 <label>
+
+       Filter By Rate
+
+       <select value={value} onChange={handleChange}>
+
+         <option value="excellent">excellent</option>
+
+         <option value="very good">very good</option>
+
+         <option value="good">good</option>
+
+       </select>
+
+     </label>
+
+     {/* <p>Rate is {value}!</p> */}
+               </div>
+             </div>
+
+             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+               <div class="input-group ">
+                 
+                 <label>
+
+       Filter By Rate
+
+       <select value={value} onChange={handleChange}>
+
+         <option value="excellent">excellent</option>
+
+         <option value="very good">very good</option>
+
+         <option value="good">good</option>
+
+       </select>
+
+     </label>
+
+     {/* <p>Rate is {value}!</p> */}
+               </div>
+             </div>
+           
+           </div>
+        
+           
+         
+         </div>
         <div className='container-fluid col-lg-10 col-md-12 col-sm-12  offset-lg-1 offset-md-0 pt-4'>
      
         { results.map(result => <div class="card m-2 " >

@@ -9,6 +9,7 @@ import i18n from '../../i18n';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../results/firebase';
 import { doc, deleteDoc } from 'firebase/firestore'
+import { Rating } from 'react-simple-star-rating';
 
 
 
@@ -17,6 +18,8 @@ function Cart() {
   const dispatch = useDispatch();
   var {setIdValue}=useContext(IdContext)
   const[allresults,setAllRes]=useState([]);
+  const [rating, setRating] = useState(0) // initial rating value
+
 
   function getAllData(){
     const q = query(collection(db, "orders"), where("userName", "==", "ahmed hesain"));
@@ -28,6 +31,26 @@ function Cart() {
      setAllRes(result);
      console.log(result)
     }).catch(err=>{console.log(err);});
+  }
+  function  rateFunc ( id) {
+    const docRef = db.collection("orders").doc(id);
+ 
+    // Update the timestamp field with the value from the server
+    const res =  docRef.update({
+     rate:rating
+    });
+   
+  }
+  const handleRating = (rate,id) => {
+    setRating(rate)
+    // rateFunc(id);
+    db.collection("orders").doc("id").update({
+     
+        rate: rating
+      
+    }).then(function() {
+      console.log("Frank food updated");
+    });
   }
   useEffect(() => {
     getAllData()
@@ -64,12 +87,12 @@ function Cart() {
                   >
                   {i18n.language==="en"?"Remove":"إزالة"} 
                    </Button>
-                   <Button
+                   {/* <Button
                     variant="btn btn-outline-success ms-2"
                      onClick={() => setIdValue(hotel.id)}
                   >
                    <Link to='/details' style={{textDecoration: "none" ,color: "green"}}>{i18n.language==="en"?"Details":"تفاصيل"}</Link> 
-                   </Button>
+                   </Button> */}
                                </div>
                                <div class="d-flex align-items-center">
                                 <div class="ratings" >
@@ -85,6 +108,24 @@ function Cart() {
                                <p class="card-text" style={{fontSize: "small"}}>{i18n.language==="en"?`${hotel.data.address}`:`${hotel.data.addressAR}`}</p>
                                <p class="card-text" style={{fontWeight: "400", fontSize: "small"}}>{hotel.data.evaluation} {i18n.language==="en"?"Excellent":"ممتاز"}<small class="text-body-secondary">(12 Reviews)</small></p>
                              </div>
+                             <div className='App'>
+                             <div>
+                               Rate Your Visit</div>
+      <Rating
+        onClick={handleRating}
+        ratingValue={rating}
+        size={20}
+        label
+        transition
+        fillColor='orange'
+        emptyColor='gray'
+        className='foo' // Will remove the inline style if applied
+      />
+      {/* Use rating value */}
+      <div>
+      {rating} Stars
+      </div>
+    </div>
                         </div>
                          </div>
                          </div>
