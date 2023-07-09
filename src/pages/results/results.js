@@ -26,27 +26,28 @@ function Results() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState('excellent');
-    const [distanceValue, setdistanceValue] = useState('');
+    const [distanceValue, setdistanceValue] = useState('0');
+    const [priceValue, setPriceValue] = useState('0');
 
     const handleChange = (event) => {
       setValue(event.target.value);
       console.log(value)
-      filterPrice();
+      filterRate(event.target.value);
       
-    //   querySnapshot.forEach((doc) => {
-    //     // doc.data() is never undefined for query doc snapshots
-    //     console.log(doc.id, " => ", doc.data());
-    // });
+    
     };
     const handleChangeDistance = (event) => {
       setdistanceValue(event.target.value);
       console.log(value)
-      filterfromTown();
+      filterfromTown(event.target.value);
       
-    //   querySnapshot.forEach((doc) => {
-    //     // doc.data() is never undefined for query doc snapshots
-    //     console.log(doc.id, " => ", doc.data());
-    // });
+    
+    };
+    const handleChangePrice = (event) => {
+      setPriceValue(event.target.value);
+      console.log(priceValue)
+      filterprice(event.target.value);
+    
     };
   const isFavorite = (movie) => {
     if (Array.isArray(favorites)) {
@@ -68,7 +69,7 @@ function Results() {
   useEffect(() =>{
    
 
-  },[dispatch,idValue,searchValue,value]);
+  },[dispatch,idValue,searchValue,value,priceValue,distanceValue]);
 
   function getData(){
     const resultsCollection=collection(db,searchValue);
@@ -82,43 +83,40 @@ function Results() {
      setLoading(false);
     }).catch(err=>{console.log(err);});
   }
-  // function filterPrice(){
-  //   const q = query(collection(db, searchValue), where("price", "==", value));
-  //   const querySnapshot =  getDocs(q);
-
-  //   querySnapshot.forEach((doc) => {
-  //     const result =doc.docs.map(doc=>({
-  //       data:doc.data(),
-  //       id:doc.id
-  //      }))
-  //      setRes(result);
-  //     // doc.data() is never undefined for query doc snapshots
-  //     console.log(doc.id, " => ", doc.data());
-  //   }).catch(err=>{console.log(err);});
-  // }
-  function filterPrice(){
-    const q = query(collection(db, searchValue), where("rate", "==", value));
-    getDocs(q).then(res=>{
-     const result =res.docs.map(doc=>({
-      data:doc.data(),
-      id:doc.id
-     }))
-     setRes(result);
-     console.log(result)
-    }).catch(err=>{console.log(err);});
-  }
-  function filterfromTown(){
-    const q = query(collection(db, searchValue), where("distance", "==", distanceValue));
-    getDocs(q).then(res=>{
-     const result =res.docs.map(doc=>({
-      data:doc.data(),
-      id:doc.id
-     }))
-     setRes(result);
-     console.log(result)
-    }).catch(err=>{console.log(err);});
-  }
   
+  function filterRate(val){
+    const q = query(collection(db, searchValue), where("rate", "==", val));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
+  function filterfromTown(dis){
+    const q = query(collection(db, searchValue), where("distance", "<=", parseInt(dis)));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
+  function filterprice(pri){
+    const q = query(collection(db, searchValue), where("price", "<=",parseInt(pri) ));
+    getDocs(q).then(res=>{
+     const result =res.docs.map(doc=>({
+      data:doc.data(),
+      id:doc.id
+     }))
+     setRes(result);
+     console.log(result)
+    }).catch(err=>{console.log(err);});
+  }
   return (
     loading?
     <div style={{width:"100%",height:"400px",paddingLeft:"45%"}}><LoadingSpinner /></div>: <div className='bg-light'>
@@ -183,7 +181,7 @@ function Results() {
         </div>
       <div className="container pt-3 ">
       <div class="row col-12 d-flex pt-3 align-items-center p-2 m-1"  >
-             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+             <div class="col-lg-4 col-md-4 col-sm-6 col-6 mb-1" >
                <div class="input-group ">
                  
                  <label>
@@ -206,7 +204,7 @@ function Results() {
                </div>
              </div>
              
-             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+             <div class="col-lg-4 col-md-4 col-sm-6 col-6 mb-1" >
                <div class="input-group ">
                  
                  <label>
@@ -215,11 +213,11 @@ function Results() {
 
        <select value={distanceValue} onChange={handleChangeDistance}>
 
-         <option value="100">100</option>
+         <option value="100">between 0-100</option>
 
-         <option value="500">500</option>
+         <option value="200">between 0-200</option>
 
-         <option value="200">200</option>
+         <option value="500">between 0-500</option>
 
        </select>
 
@@ -229,43 +227,21 @@ function Results() {
                </div>
              </div>
 
-             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
+             <div class="col-lg-4 col-md-4 col-sm-12 col-12 mb-1" >
                <div class="input-group ">
                  
-                 <label>
+                 <label >
 
-       Filter By Rate
+       Filter By Price
 
-       <select value={value} onChange={handleChange}>
+       <select value={priceValue} onChange={handleChangePrice}>
 
-         <option value="excellent">excellent</option>
+         <option value='100'>between 0-100</option>
 
-         <option value="very good">very good</option>
+         <option value="500">between 0-500</option>
 
-         <option value="good">good</option>
-
-       </select>
-
-     </label>
-
-     {/* <p>Rate is {value}!</p> */}
-               </div>
-             </div>
-
-             <div class="col-lg-3 col-md-3 col-sm-6 col-6 mb-1" >
-               <div class="input-group ">
-                 
-                 <label>
-
-       Filter By Rate
-
-       <select value={value} onChange={handleChange}>
-
-         <option value="excellent">excellent</option>
-
-         <option value="very good">very good</option>
-
-         <option value="good">good</option>
+         <option value="1000">between 0-1000</option>
+         <option value="2000">between 0-2000</option>
 
        </select>
 
@@ -274,6 +250,8 @@ function Results() {
      {/* <p>Rate is {value}!</p> */}
                </div>
              </div>
+
+      
            
            </div>
         

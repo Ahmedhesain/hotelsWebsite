@@ -13,7 +13,7 @@ import { LanguageProvider } from './context/languageContext';
 import { IdProvider } from './context/contextId';
 import Details from './pages/details/details';
 import Booking from './pages/booking/booking';
-import LangChange from './pages/language/language';
+// import LangChange from './pages/language/language';
 import { PersonsProvider } from './context/personsContext';
 import Login from './pages/login/login';
 import { CheckinProvider } from './context/checkinContext';
@@ -67,7 +67,7 @@ function App() {
     <Route path='/results' element={<Results/>}></Route>
     <Route path='/details' element={<Details/>}></Route>
     <Route path='/booking' element={<Booking/>}></Route>
-    <Route path='/languages' element={<LangChange/>}></Route>
+    {/* <Route path='/languages' element={<LangChange/>}></Route> */}
     <Route path='/login' element={<Login/>} ></Route>
     <Route path='/cart' element={<PrivateCart/>} ></Route>
 

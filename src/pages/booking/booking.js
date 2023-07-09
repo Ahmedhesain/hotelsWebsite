@@ -22,7 +22,7 @@ export default function Booking() {
     var {checkinValue}=useContext(CheckinContext);
     var {checkoutValue}=useContext(CheckoutContext);
     const[results,setRes]=useState({});
-    const [paid,setPaid] = useState(false);
+    // const [paid,setPaid] = useState(false);
     // const [hotName,setHotName] = useState();
     // const [price,setPrice] = useState();
     const [userBooking,setUserBooking] = useState({
@@ -45,7 +45,7 @@ export default function Booking() {
       evt.preventDefault();
         const collRef=collection(db,"orders")
         if(errors.userFirstNameErr===""&&errors.userLastNameErr===""&&errors.userEmailErr===""&&errors.userPhoneErr===""){
-        addDoc(collRef,{userName:localStorage.name,roomName:results.name,roomId:idValue,persons:personsValue,firstName:userBooking.userFirstName,lastName:userBooking.userLastName,email:userBooking.userEmail,phone:userBooking.userPhone,checkIn:checkinValue,checkOut:checkoutValue})
+        addDoc(collRef,{userName:localStorage.name,email:localStorage.email,name:results.name,img:results.img1,price:results.price,roomId:idValue,persons:personsValue,firstName:userBooking.userFirstName,lastName:userBooking.userLastName,email:userBooking.userEmail,phone:userBooking.userPhone,checkIn:checkinValue,checkOut:checkoutValue})
       
       navigate("/");
 
@@ -136,6 +136,7 @@ export default function Booking() {
                   </Nav.Link>
                 </div>
                 {/* 2 */}
+                {(userBooking.userPaid==="") ?
                 <div class="col bg-light  border border-black">
                   <div class="container border-bottom border-black">
                     <div class="row align-items-start">
@@ -150,111 +151,23 @@ export default function Booking() {
                         </svg>
                       </div>
                       <div class="col-11 fw-bold fs-4">
-                      {i18n.language==="en"?`step 1: Your details`:`الخطوة 1: التفاصيل الخاصة بك`}
+                      {i18n.language==="en"?`step 1: Property Payments `:`الخطوة 1: تفاصيل الدفع`}
                         
                       </div>
                     </div>
+                    
+                    
+
                   </div>
                   {/*  */}
-                  <form onSubmit={(e)=>{handleSubmit(e)}}>
-                    <div class="mb-3">
-                      <label for="firstName" class="form-label">
-                      {i18n.language==="en"?`First Name`:`الاسم الأول`}
-                        
-                      </label>
-                      <div id="emailHelp" class="form-text">
-                      {i18n.language==="en"?`Please give us the name of one of the people staying in this room.`:`يرجى إعطائنا اسم أحد الأشخاص المقيمين في هذه الغرفة.`}
+                 
+                  <div class="col-11 fw-bold fs-4">
+                      {i18n.language==="en"?`Please Pay First `:`الرجاء الدقغ اولا`}
                         
                       </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="firstName"
-                        placeholder="First Name"
-                        value={userBooking.userFirstName}
-                        name="firstName"
-                        onChange={(e)=>{handleChange(e)}}
-                      />
-                      <p className="text-danger">{errors.userFirstNameErr}</p>
-                    </div>
-                    <div class="mb-3">
-                      <label for="lastName" class="form-label">
-                      {i18n.language==="en"?`Last Name`:`اسم العائلة`}
-                        
-                      </label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="lastName"
-                        placeholder="Last Name"
-                        value={userBooking.userLastName}
-                        name="lastName"
-                        onChange={(e)=>{handleChange(e)}}
-                      />
-                      <p className="text-danger">{errors.userLastNameErr}</p>
-                    </div>
-                    <div class="mb-3">
-                      <label for="email" class="form-label">
-                      {i18n.language==="en"?`Email address`:`عنوان البريد الإلكتروني`}
-                        
-                      </label>
-                      <div id="emailHelp" class="form-text">
-                      {i18n.language==="en"?`Your confirmation email goes here`:`البريد الإلكتروني الخاص بالتأكيد يذهب هنا`}
-                        
-                      </div>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        aria-describedby="emailHelp"
-                        placeholder="Email address"
-                        value={userBooking.userEmail}
-                        name="email"
-                        onChange={(e)=>{handleChange(e)}}
-                      />
-                      <p className="text-danger">{errors.userEmailErr}</p>
-                      <div id="emailHelp" class="form-text">
-                      {i18n.language==="en"?`We'll never share your email with anyone else.`:`لن نشارك بريدك الإلكتروني مع أي شخص آخر.`}
-                        
-                      </div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="phoneNumber" class="form-label">
-                      {i18n.language==="en"?`Phone Number`:`رقم التليفون`}
-                        
-                      </label>
-                      <div id="emailHelp" class="form-text">
-                      {i18n.language==="en"?`We will only contact you in an emergency`:`سوف نتصل بك فقط في حالات الطوارئ`}
-                        
-                      </div>
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="phoneNumber"
-                        placeholder="Phone Number"
-                        value={userBooking.userPhone}
-                        name="phoneNumber"
-                        onChange={(e)=>{handleChange(e)}}
-                      />
-                      <p className="text-danger">{errors.userPhoneErr}</p>
-                    </div>
-                    <div class="mb-3 form-check">
-                      <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="exampleCheck1"
-                      />
-                      <label class="form-check-label" for="exampleCheck1">
-                      {i18n.language==="en"?`Check this box if you would not like to receive
-                        Hotels.com special deals email newsletter that contains
-                        great hotel promotions.`:`حدد هذا المربع إذا كنت لا ترغب في تلقي
-                        نشرة إخبارية عبر البريد الإلكتروني تحتوي على صفقات خاصة على موقع Hotels.com
-                        عروض فندقية رائعة.`}
-                        
-                      </label>
 
-                    </div>
-                    <div className="col-4">
+                    
+                  <div className="col-4 mt-3">
                       {/* <ButtonPay product={product}  /> */}
                       {(results.name&&results.price)?
                       <PayPalButtons
@@ -262,6 +175,7 @@ export default function Booking() {
                         color: "silver",
                         layout: "horizontal",
                         height: 48,
+                        
 
                         shape: "pill",
                       }}
@@ -285,128 +199,236 @@ export default function Booking() {
                       
                     /> : <h1>err</h1>}
                     </div>
-                    <button className="btn btn-primary" type="submit" disabled={(userBooking.userEmail===""||userBooking.userFirstName===""||userBooking.userLastName===""||userBooking.userPhone===""||userBooking.userPaid==="")}>{i18n.language==="en"?`Reserve`:`إحجز`}</button>
+                    <div>
+                      {(userBooking.userPaid!=="") ? <h3> {i18n.language==="en"?`you Complete Payemnet Please go to step 2 `:`اكتمل الدفع الرجاء اذهب للخطوة 2`} </h3> : ""}
 
-                  </form>
-                </div>
+                    </div>
+
+                </div>: ""
+                }
                 {/* 3 */}
+                {(userBooking.userPaid!=="") ?
                 <div class="col bg-light  border border-black">
-                  <div class="container border-bottom border-black">
-                    <div class="row align-items-start">
-                      <div class="col-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="30"
-                          viewBox="0 -960 960 960"
-                          width="30"
-                        >
-                          <path d="M40-200v-585h60v394h353v-309h322q59.812 0 102.406 42.594Q920-614.812 920-555v355h-60v-131H100v131H40Zm230-249q-45 0-75.5-30.5T164-555q0-45 30.5-75.5T270-661q45 0 75.5 30.5T376-555q0 45-30.5 75.5T270-449Zm243 58h347v-164q0-35.062-24.969-60.031T775-640H513v249ZM270-509q19 0 32.5-13.5T316-555q0-19-13.5-32.5T270-601q-19 0-32.5 13.5T224-555q0 19 13.5 32.5T270-509Zm0-46Zm243-85v249-249Z" />
-                        </svg>
-                      </div>
-                      <div class="col-11 fw-bold fs-4">
-                      
-                      {i18n.language==="en"?`step 2: Property details`:`الخطوة 2: تفاصيل الملكية`}
-                      </div>
+                <div class="container border-bottom border-black">
+                  <div class="row align-items-start">
+                    <div class="col-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="30"
+                        viewBox="0 -960 960 960"
+                        width="30"
+                      >
+                        <path d="M40-200v-585h60v394h353v-309h322q59.812 0 102.406 42.594Q920-614.812 920-555v355h-60v-131H100v131H40Zm230-249q-45 0-75.5-30.5T164-555q0-45 30.5-75.5T270-661q45 0 75.5 30.5T376-555q0 45-30.5 75.5T270-449Zm243 58h347v-164q0-35.062-24.969-60.031T775-640H513v249ZM270-509q19 0 32.5-13.5T316-555q0-19-13.5-32.5T270-601q-19 0-32.5 13.5T224-555q0 19 13.5 32.5T270-509Zm0-46Zm243-85v249-249Z" />
+                      </svg>
                     </div>
-                  </div>
-                  {/*  */}
-                  <h5>{i18n.language==="en"?`Property highlights`:`مميزات العقار`}</h5>
-                  <div class="container text-center">
-                    <div class="row align-items-start">
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="M160-120v-60h639v60H160Zm151-120q-63 0-107-43.5T160-390v-450h660q24.75 0 42.375 17.625T880-780v160q0 24.75-17.625 42.375T820-560h-96v170q0 63-44 106.5T573-240H311Zm0-60h261.978Q609-300 636.5-327.5T664-390v-390H220v390q0 35 28 62.5t63 27.5Zm413-320h96v-160h-96v160Zm-282 80Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Free breakfast`:`فطور مجاني`}</span>
-                      </div>
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="m232-357-63-63q70-70 146.5-105T480-560q88 0 164.5 35T791-420l-63 63q-61-61-123-87t-125-26q-63 0-125 26t-123 87ZM63-526 0-589q93-95 216.5-153T480-800q140 0 263.5 58T960-589l-63 63q-88-84-192.5-134T480-710q-120 0-224.5 50T63-526Zm417 417 148-149q-29-29-66.5-45.5T480-320q-44 0-81.5 16.5T332-258l148 149Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Free WiFi`:`واى فاى مجانى`}</span>
-                      </div>
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="M200-204v54q0 12.75-8.625 21.375T170-120h-20q-12.75 0-21.375-8.625T120-150v-324l85-256q5-14 16.5-22t26.5-8h464q15 0 26.5 8t16.5 22l85 256v324q0 12.75-8.625 21.375T810-120h-21q-13 0-21-8.625T760-150v-54H200Zm3-330h554l-55-166H258l-55 166Zm-23 60v210-210Zm105.765 160Q309-314 324.5-329.75T340-368q0-23.333-15.75-39.667Q308.5-424 286-424q-23.333 0-39.667 16.265Q230-391.471 230-368.235 230-345 246.265-329.5q16.264 15.5 39.5 15.5ZM675-314q23.333 0 39.667-15.75Q731-345.5 731-368q0-23.333-16.265-39.667Q698.471-424 675.235-424 652-424 636.5-407.735q-15.5 16.264-15.5 39.5Q621-345 636.75-329.5T675-314Zm-495 50h600v-210H180v210Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Free Parking`:`موقف سيارات مجاني`}</span>
-                      </div>
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="M160-340v-380q0-41 19-71.5t58.5-50q39.5-19.5 100-29T480-880q86 0 146.5 9t99 28.5Q764-823 782-793t18 73v380q0 59-40.5 99.5T660-200l60 60v20h-70l-80-80H390l-80 80h-70v-20l60-60q-59 0-99.5-40.5T160-340Zm320-480q-120 0-173 15.5T231-760h501q-18-27-76.5-43.5T480-820ZM220-545h234v-155H220v155Zm440 60H220h520-80Zm-146-60h226v-155H514v155ZM335-315q23 0 39-16t16-39q0-23-16-39t-39-16q-23 0-39 16t-16 39q0 23 16 39t39 16Zm290 0q23 0 39-16t16-39q0-23-16-39t-39-16q-23 0-39 16t-16 39q0 23 16 39t39 16Zm-325 60h360q34 0 57-25t23-60v-145H220v145q0 35 23 60t57 25Zm180-505h252-501 249Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Airport transfers`:`انتقالات المطار`}</span>
-                      </div>
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="m550-84-42-42 142-142-382-382-142 142-42-42 56-58-56-56 85-85-42-42 42-42 43 41 84-84 56 56 58-56 42 42-142 142 382 382 142-142 42 42-56 58 56 56-86 86 42 42-42 42-42-42-84 84-56-56-58 56Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Gym`:`الجمنازيوم`}</span>
-                      </div>
-                      <div class="col">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          viewBox="0 -960 960 960"
-                          width="20"
-                        >
-                          <path d="m232-357-63-63q70-70 146.5-105T480-560q88 0 164.5 35T791-420l-63 63q-61-61-123-87t-125-26q-63 0-125 26t-123 87ZM63-526 0-589q93-95 216.5-153T480-800q140 0 263.5 58T960-589l-63 63q-88-84-192.5-134T480-710q-120 0-224.5 50T63-526Zm417 417 148-149q-29-29-66.5-45.5T480-320q-44 0-81.5 16.5T332-258l148 149Z" />
-                        </svg>
-                        <span class="h6">{i18n.language==="en"?`Internet access`:`خدمة الإنترنت`}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <h5 className="mt-5">{i18n.language==="en"?`Preferences`:`التفضيلات`}</h5>
-                  <h6>{i18n.language==="en"?`Smoking preferences are not guaranteed`:`لا يتم ضمان تفضيلات التدخين`}</h6>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="Smoking"
-                    />
-                    <label class="form-check-label" for="Smoking">
-                    {i18n.language==="en"?`Smoking`:`التدخين`}
-                    </label>
-                    <div className="container-fluid ">
-                      <Nav.Link href="#home" className="link-underline-primary text-primary">
-                      {i18n.language==="en"?`Any special requests?`:`أي طلبات خاصة؟`}
-                      </Nav.Link>
-                    </div>
-                    <div className="container-fluid">
-                      <Nav.Link href="#home" className="link-underline-primary text-primary">
-                      {i18n.language==="en"?`Any accessibility requests?`:`أي طلبات وصول؟`}
-                      </Nav.Link>
+                    <div class="col-11 fw-bold fs-4">
+                    {i18n.language==="en"?`step 2: Your details`:`الخطوة 2: التفاصيل الخاصة بك`}
+                    
                     </div>
                   </div>
                 </div>
+                {/*  */}
+                {/* <h5>{i18n.language==="en"?`Property highlights`:`مميزات العقار`}</h5>
+                <div class="container text-center">
+                  <div class="row align-items-start">
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="M160-120v-60h639v60H160Zm151-120q-63 0-107-43.5T160-390v-450h660q24.75 0 42.375 17.625T880-780v160q0 24.75-17.625 42.375T820-560h-96v170q0 63-44 106.5T573-240H311Zm0-60h261.978Q609-300 636.5-327.5T664-390v-390H220v390q0 35 28 62.5t63 27.5Zm413-320h96v-160h-96v160Zm-282 80Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Free breakfast`:`فطور مجاني`}</span>
+                    </div>
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="m232-357-63-63q70-70 146.5-105T480-560q88 0 164.5 35T791-420l-63 63q-61-61-123-87t-125-26q-63 0-125 26t-123 87ZM63-526 0-589q93-95 216.5-153T480-800q140 0 263.5 58T960-589l-63 63q-88-84-192.5-134T480-710q-120 0-224.5 50T63-526Zm417 417 148-149q-29-29-66.5-45.5T480-320q-44 0-81.5 16.5T332-258l148 149Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Free WiFi`:`واى فاى مجانى`}</span>
+                    </div>
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="M200-204v54q0 12.75-8.625 21.375T170-120h-20q-12.75 0-21.375-8.625T120-150v-324l85-256q5-14 16.5-22t26.5-8h464q15 0 26.5 8t16.5 22l85 256v324q0 12.75-8.625 21.375T810-120h-21q-13 0-21-8.625T760-150v-54H200Zm3-330h554l-55-166H258l-55 166Zm-23 60v210-210Zm105.765 160Q309-314 324.5-329.75T340-368q0-23.333-15.75-39.667Q308.5-424 286-424q-23.333 0-39.667 16.265Q230-391.471 230-368.235 230-345 246.265-329.5q16.264 15.5 39.5 15.5ZM675-314q23.333 0 39.667-15.75Q731-345.5 731-368q0-23.333-16.265-39.667Q698.471-424 675.235-424 652-424 636.5-407.735q-15.5 16.264-15.5 39.5Q621-345 636.75-329.5T675-314Zm-495 50h600v-210H180v210Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Free Parking`:`موقف سيارات مجاني`}</span>
+                    </div>
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="M160-340v-380q0-41 19-71.5t58.5-50q39.5-19.5 100-29T480-880q86 0 146.5 9t99 28.5Q764-823 782-793t18 73v380q0 59-40.5 99.5T660-200l60 60v20h-70l-80-80H390l-80 80h-70v-20l60-60q-59 0-99.5-40.5T160-340Zm320-480q-120 0-173 15.5T231-760h501q-18-27-76.5-43.5T480-820ZM220-545h234v-155H220v155Zm440 60H220h520-80Zm-146-60h226v-155H514v155ZM335-315q23 0 39-16t16-39q0-23-16-39t-39-16q-23 0-39 16t-16 39q0 23 16 39t39 16Zm290 0q23 0 39-16t16-39q0-23-16-39t-39-16q-23 0-39 16t-16 39q0 23 16 39t39 16Zm-325 60h360q34 0 57-25t23-60v-145H220v145q0 35 23 60t57 25Zm180-505h252-501 249Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Airport transfers`:`انتقالات المطار`}</span>
+                    </div>
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="m550-84-42-42 142-142-382-382-142 142-42-42 56-58-56-56 85-85-42-42 42-42 43 41 84-84 56 56 58-56 42 42-142 142 382 382 142-142 42 42-56 58 56 56-86 86 42 42-42 42-42-42-84 84-56-56-58 56Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Gym`:`الجمنازيوم`}</span>
+                    </div>
+                    <div class="col">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="20"
+                        viewBox="0 -960 960 960"
+                        width="20"
+                      >
+                        <path d="m232-357-63-63q70-70 146.5-105T480-560q88 0 164.5 35T791-420l-63 63q-61-61-123-87t-125-26q-63 0-125 26t-123 87ZM63-526 0-589q93-95 216.5-153T480-800q140 0 263.5 58T960-589l-63 63q-88-84-192.5-134T480-710q-120 0-224.5 50T63-526Zm417 417 148-149q-29-29-66.5-45.5T480-320q-44 0-81.5 16.5T332-258l148 149Z" />
+                      </svg>
+                      <span class="h6">{i18n.language==="en"?`Internet access`:`خدمة الإنترنت`}</span>
+                    </div>
+                  </div>
+                </div>
+                <h5 className="mt-5">{i18n.language==="en"?`Preferences`:`التفضيلات`}</h5>
+                <h6>{i18n.language==="en"?`Smoking preferences are not guaranteed`:`لا يتم ضمان تفضيلات التدخين`}</h6>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="Smoking"
+                  />
+                  <label class="form-check-label" for="Smoking">
+                  {i18n.language==="en"?`Smoking`:`التدخين`}
+                  </label>
+                  <div className="container-fluid ">
+                    <Nav.Link href="#home" className="link-underline-primary text-primary">
+                    {i18n.language==="en"?`Any special requests?`:`أي طلبات خاصة؟`}
+                    </Nav.Link>
+                  </div>
+                  <div className="container-fluid">
+                    <Nav.Link href="#home" className="link-underline-primary text-primary">
+                    {i18n.language==="en"?`Any accessibility requests?`:`أي طلبات وصول؟`}
+                    </Nav.Link>
+                  </div>
+                </div> */}
+                <form onSubmit={(e)=>{handleSubmit(e)}}>
+                  <div class="mb-3">
+                    <label for="firstName" class="form-label">
+                    {i18n.language==="en"?`First Name`:`الاسم الأول`}
+                      
+                    </label>
+                    <div id="emailHelp" class="form-text">
+                    {i18n.language==="en"?`Please give us the name of one of the people staying in this room.`:`يرجى إعطائنا اسم أحد الأشخاص المقيمين في هذه الغرفة.`}
+                      
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      placeholder="First Name"
+                      value={userBooking.userFirstName}
+                      name="firstName"
+                      onChange={(e)=>{handleChange(e)}}
+                    />
+                    <p className="text-danger">{errors.userFirstNameErr}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="lastName" class="form-label">
+                    {i18n.language==="en"?`Last Name`:`اسم العائلة`}
+                      
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      placeholder="Last Name"
+                      value={userBooking.userLastName}
+                      name="lastName"
+                      onChange={(e)=>{handleChange(e)}}
+                    />
+                    <p className="text-danger">{errors.userLastNameErr}</p>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">
+                    {i18n.language==="en"?`Email address`:`عنوان البريد الإلكتروني`}
+                      
+                    </label>
+                    <div id="emailHelp" class="form-text">
+                    {i18n.language==="en"?`Your confirmation email goes here`:`البريد الإلكتروني الخاص بالتأكيد يذهب هنا`}
+                      
+                    </div>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      aria-describedby="emailHelp"
+                      placeholder="Email address"
+                      value={userBooking.userEmail}
+                      name="email"
+                      onChange={(e)=>{handleChange(e)}}
+                    />
+                    <p className="text-danger">{errors.userEmailErr}</p>
+                    <div id="emailHelp" class="form-text">
+                    {i18n.language==="en"?`We'll never share your email with anyone else.`:`لن نشارك بريدك الإلكتروني مع أي شخص آخر.`}
+                      
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">
+                    {i18n.language==="en"?`Phone Number`:`رقم التليفون`}
+                      
+                    </label>
+                    <div id="emailHelp" class="form-text">
+                    {i18n.language==="en"?`We will only contact you in an emergency`:`سوف نتصل بك فقط في حالات الطوارئ`}
+                      
+                    </div>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phoneNumber"
+                      placeholder="Phone Number"
+                      value={userBooking.userPhone}
+                      name="phoneNumber"
+                      onChange={(e)=>{handleChange(e)}}
+                    />
+                    <p className="text-danger">{errors.userPhoneErr}</p>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="exampleCheck1"
+                    />
+                    <label class="form-check-label" for="exampleCheck1">
+                    {i18n.language==="en"?`Check this box if you would not like to receive
+                      Hotels.com special deals email newsletter that contains
+                      great hotel promotions.`:`حدد هذا المربع إذا كنت لا ترغب في تلقي
+                      نشرة إخبارية عبر البريد الإلكتروني تحتوي على صفقات خاصة على موقع Hotels.com
+                      عروض فندقية رائعة.`}
+                      
+                    </label>
+
+                  </div>
+                  
+                  <button className="btn btn-primary" type="submit" disabled={(userBooking.userEmail===""||userBooking.userFirstName===""||userBooking.userLastName===""||userBooking.userPhone===""||userBooking.userPaid==="")}>{i18n.language==="en"?`Reserve`:`إحجز`}</button>
+
+                </form>
+              </div> : ""
+
+                }
                 {/* 4 */}
-                <div class="col bg-light  border border-black">
+                {/* <div class="col bg-light  border border-black">
                   <form>
                     <div class="container border-bottom border-black">
                       <div class="row align-items-start">
@@ -426,7 +448,7 @@ export default function Booking() {
                         </div>
                       </div>
                     </div>
-                    {/*  */}
+                    
                     <h6>{i18n.language==="en"?`We never charge any card fees`:`نحن لا نفرض أي رسوم على البطاقة`}</h6>
                     <div class="container border-bottom border-black">
                       <div class="row align-items-start">
@@ -504,7 +526,7 @@ export default function Booking() {
                             </div>
                           </div>
                         </div>
-                        {/*  */}
+                        
                         <div class="col">
                           <h6>{i18n.language==="en"?`We accept the following payment methods`:`نقبل وسائل الدفع التالية`}</h6>
                           <div class="container text-center">
@@ -678,7 +700,7 @@ export default function Booking() {
                       />
                     </div>
                   </form>
-                </div>
+                </div> */}
 
                 {/* 5 */}
                 <div class="col bg-light  border border-black">
