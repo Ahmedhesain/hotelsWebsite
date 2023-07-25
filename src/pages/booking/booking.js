@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState,useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Accordion from "react-bootstrap/Accordion";
@@ -14,7 +14,7 @@ import { CheckoutContext } from "../../context/checkoutContext copy";
 import {  useNavigate } from "react-router-dom";
 import i18n from "../../i18n";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-
+// import emailjs from '@emailjs/browser';
 export default function Booking() {
   const navigate = useNavigate();
     var {idValue}=useContext(IdContext);
@@ -46,8 +46,8 @@ export default function Booking() {
         const collRef=collection(db,"orders")
         if(errors.userFirstNameErr===""&&errors.userLastNameErr===""&&errors.userEmailErr===""&&errors.userPhoneErr===""){
         addDoc(collRef,{userName:localStorage.name,email:localStorage.email,name:results.name,img:results.img1,price:results.price,roomId:idValue,persons:personsValue,firstName:userBooking.userFirstName,lastName:userBooking.userLastName,email:userBooking.userEmail,phone:userBooking.userPhone,checkIn:checkinValue,checkOut:checkoutValue})
-      
-      navigate("/");
+        // sendEmail()
+      navigate("/cart");
 
       }
     }
@@ -87,16 +87,28 @@ export default function Booking() {
       const handleApprove =(orderId)=>{
         setUserBooking({...userBooking,userPaid: "paaid"});
       }
+        // const form = useRef();
+       
+        // const sendEmail = (e) => {
+        //   e.preventDefault(); // prevents the page from reloading when you hit “Send”
+       
+        //   emailjs.sendForm('ahesain8@gmail.com', 'YOUR_TEMPLATE_ID', form.current, 'YOUR_PUBLIC_KEY')
+        //     .then((result) => {
+        //         // show the user a success message
+        //     }, (error) => {
+        //         // show the user an error
+        //     });
+        // };
   return (
-    <div class="container-fluid px-4  bg-secondary-subtle" dir={`${i18n.language==="en"?"ltr":"rtl"}`}>
+    <div class="container-fluid px-4 pt-3 bg-secondary-subtle" dir={`${i18n.language==="en"?"ltr":"rtl"}`}>
       <div class="row gx-1">
-        <div class="col-8 ">
-                <div class="col bg-light  mt-0 m-3 mb-1 h1 p-2 border border-black">
-                {i18n.language==="en"?`${results.name}`:`${results.nameAR}`}
-                </div>
-          <div class="p-3">
+        <div class="col-lg-8 ">
+          <div class="p-0">
             <div class="container ">
               <div class="row row-cols-1 gy-2 ">
+              <div class="col bg-light  p-1 mb-2 h1 border border-black">
+                {i18n.language==="en"?`${results.name}`:`${results.nameAR}`}
+                </div>
                 {/* 1 */}
                 <div class="col bg-light   p-0 mt-0 border border-black">
                   <Nav.Link href="#home">
@@ -881,7 +893,7 @@ export default function Booking() {
           </div>
         </div>
         {/* second column */}
-        <div class="col-4 ">
+        <div class="col-lg-4 ">
           <div class="p-3 bg-light  border border-black">
             <div className="container-fluid">
               <Carousel>

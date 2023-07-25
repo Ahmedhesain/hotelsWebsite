@@ -12,11 +12,12 @@ export default function Login() {
 
   useEffect(() => {
       setUser(localStorage.name);
+      
   }, [user])
 
   let template;
   if (localStorage.name!==undefined) {
-    template =      <div className="home">
+    template = <div className="home">
     <h4>Hello, <span></span>{user}</h4>
     <img className="rounded-pill" src={localStorage.photo} alt="not found" />
     <button className="button signout  btn btn-danger  rounded-pill mb-5 d-block mt-3 ms-auto me-auto " onClick={() =>{ auth.signOut()
@@ -53,7 +54,7 @@ export default function Login() {
               style={{ width: 20, height: 20 }}
               
             />
-            Sign in with Google
+            {i18n.language ==="en"?"Sign in with Google":"سجل الدخول بإستخدام Google"}
           </button>
 
         </div>

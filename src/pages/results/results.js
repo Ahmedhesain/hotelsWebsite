@@ -13,6 +13,7 @@ import { CheckinContext } from '../../context/checkinContext';
 import { CheckoutContext } from '../../context/checkoutContext copy';
 import LoadingSpinner from './loading';
 import i18n from '../../i18n';
+import ReactStars from 'react-rating-star-with-type'
 
 
 function Results() {
@@ -24,7 +25,7 @@ function Results() {
     var {checkoutValue,setCheckoutValue}=useContext(CheckoutContext);
     const favorites = useSelector((state) => state.favorites.favorites);
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [value, setValue] = useState('excellent');
     const [distanceValue, setdistanceValue] = useState('0');
     const [priceValue, setPriceValue] = useState('0');
@@ -69,7 +70,7 @@ function Results() {
   useEffect(() =>{
    
 
-  },[dispatch,idValue,searchValue,value,priceValue,distanceValue]);
+  },[dispatch,loading,idValue,searchValue,value,priceValue,distanceValue]);
 
   function getData(){
     const resultsCollection=collection(db,searchValue);
@@ -305,21 +306,31 @@ function Results() {
                     )}
                   </Link>
             </div>
+          
             <div class="d-flex align-items-center">
               <div class="ratings" >
+                  {/* <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
                   <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
                   <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
                   <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
-                  <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
-                  <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i>
+                  <i class="fa fa-star rating-color" style={{fontSize:" small"}}></i> */}
 
               </div>
               <p class="review-count " style={{color: "darkgray"}}>{i18n.language==="en"?`${result.data.city}`:`${result.data.cityAR}`}</p>
           </div>
           
             <p class="card-text" style={{fontSize: "small"}}>{result.data.distance} {i18n.language==="en"?`km from city center`:`كيلومتر من مركز المدينة`}</p>
-            <p class="card-text" style={{fontWeight: "400", fontSize:" small"}}>{result.data.evaluation} {i18n.language==="en"?`Excellent`:`ممتاز`}<small class="text-body-secondary">(12 Reviews)</small></p>
+            <p class="card-text" style={{fontWeight: "400", fontSize:" small"}}>{result.data.evaluation/2} {result.data.rate}<small class="text-body-secondary">(12 Reviews)</small></p>
+            <ReactStars 
+    value={result.data.evaluation/2}  
+    edit={false}  
+    activeColors='orange' 
+    />
           </div>
+          <div class="d-flex align-items-center">
+
+         
+    </div>
         </div>
         <div class="col-md-5 col-sm-5 col-lg-4">
           <div class="card text-right let1 m-1 p-0 " style={{ backgroundColor: "#f1f8ea"}}>

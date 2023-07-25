@@ -40,8 +40,8 @@ function NavBar() {
             <Nav.Link ><Link to='/login' style={{color:"#D32F2F",fontWeight:"700",textDecoration:"none"}}>{localStorage.name===undefined?`${t("Login")}`:localStorage.name?.split(' ')[0]}</Link></Nav.Link>
             <Nav.Link ><Link style={{ color: "#D32F2F", fontWeight: "700", textDecoration: "none" }} ><div className='d-flex dropdown'>
               <select   className='ms-2  ' style={{ color: "#D32F2F", fontWeight: "700", textDecoration: "none" }} onChange={selectTeam} id="teams">
-                <option  value="en">Language</option>
-                <option  value="ar">اللغة</option>
+                <option  value="en">English</option>
+                <option  value="ar">عربي</option>
               </select>
 
             </div></Link></Nav.Link>

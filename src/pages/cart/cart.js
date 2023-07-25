@@ -11,6 +11,7 @@ import { db } from '../results/firebase';
 import { doc, deleteDoc } from 'firebase/firestore'
 import { Rating } from 'react-simple-star-rating';
 import ReactStars from 'react-rating-star-with-type'
+import LoadingSpinner from '../results/loading';
 
 
 
@@ -21,26 +22,31 @@ function Cart() {
   const[allresults,setAllRes]=useState([]);
   const [rating, setRating] = useState(0) // initial rating value
 
+  const [loading, setLoading] = useState(true);
 
   function getAllData(){
-    const q = query(collection(db, "orders"), where("userName", "==", "ahmed hesain"));
+    const q = query(collection(db, "orders"), where("userName", "==", localStorage.name));
     getDocs(q).then(res=>{
+
      const result =res.docs.map(doc=>({
       data:doc.data(),
       id:doc.id
      }))
      setAllRes(result);
      console.log(result)
+     setLoading(false)
+
     }).catch(err=>{console.log(err);});
   }
 
+  
   const handleUpdate = (id,rate) =>{
 
     const examcollref = doc(db,'orders', id)
     updateDoc(examcollref,{
       rateCustomer:(rate+1)
     } ).then(response => {
-      window.location.reload(false);
+      // window.location.reload(false);
     }).catch(error =>{
       console.log(error.message)
     })
@@ -49,6 +55,7 @@ function Cart() {
 
   useEffect(() => {
     getAllData()
+
   }, []);
   useEffect(() => {
     getAllData()
@@ -62,9 +69,10 @@ function Cart() {
 
 
   return (
-<div class="row col-12 ">
+    loading?<div class="row col-12 " style={{width:"100%",height:"500px",paddingLeft:"50%"}}><LoadingSpinner /></div>:   <div class="row col-12 ">
+
         {allresults.map((hotel) => (
-              <div class="container-fluid col-lg-5 col-md-6 col-sm-12  offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
+            <div class="container-fluid col-lg-5 col-md-6 col-sm-12  offset-lg-1 offset-md-0 mb-sm-3 me-lg-0 mb-3" >
 
                 <div class="card "key={hotel.id}  style={{boxShadow: "4px 4px 4px 4px #888888"}} >
                          <div class="row g-0">
@@ -92,6 +100,12 @@ function Cart() {
                           
                             
                                <p class="card-text" style={{fontSize: "small"}}>Price:{i18n.language==="en"?`${hotel.data.price}`:`${hotel.data.price}`}</p>
+                               <div>
+                               <p class="card-text" style={{fontSize: "small"}}>Check-in:{i18n.language==="en"?`${hotel.data.checkIn}`:`${hotel.data.checkIn}`}</p>
+                               <p class="card-text" style={{fontSize: "small"}}>Check-out:{i18n.language==="en"?`${hotel.data.checkOut}`:`${hotel.data.checkOut}`}</p>
+
+                               </div>
+                              
                                {/* <div>
                                {localStorage.name}
                               <img className="rounded-pill" src={localStorage.photo} alt="not found" />
@@ -122,9 +136,10 @@ function Cart() {
                 </div>
                 <ReactStars 
     value={hotel.data.rateCustomer}  
-    edit={true}  
+    edit={false}  
     activeColors='orange' 
     />
+    {/* {hotel.data.rateCustomer}  Stars */}
               </div>
             </div>
       
